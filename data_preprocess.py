@@ -2,12 +2,12 @@
 import os
 import numpy as np
 import librosa
-
+from tqdm.auto import tqdm
 
 def make_frames(filename, folder, frame_length, overlapping_fraction):
     """ takes the .wav file name, frame length and overlapping percentage and returns numpy arrays of frames and classes"""
     class_id = filename.split("-")[1]
-    filename = "./dataset/audio" + "/" + folder + "/" + filename
+    filename = "./dataset/mini" + "/" + folder + "/" + filename
     data, sample_rate = librosa.load(filename, sr=16000)
     stride = int((1 - overlapping_fraction) * frame_length)
     num_frames = int((len(data) - frame_length) / stride) + 1
@@ -24,13 +24,14 @@ def make_frames(filename, folder, frame_length, overlapping_fraction):
 def make_frames_folder(folders, frame_length, overlapping_fraction):
     """ takes a list of folders and makes frames for all audio files in that folder"""
     data = []
-    for folder in folders:
-        files = os.listdir("./dataset/audio" + "/" + folder)
-        for file in files:
+    for folder in tqdm(folders):
+        files = os.listdir("./dataset/mini" + "/" + folder)
+        for file in tqdm(files):
             res = make_frames(file, folder, frame_length, overlapping_fraction)
             if res is not None:
                 data.append(res)
     dataset = data[0]
     for i in range(1, len(data)):
         dataset = np.vstack((dataset, data[i]))
+    np.save("dataset_checkpoint.npy", dataset)
     return dataset

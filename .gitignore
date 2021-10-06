@@ -1,2 +1,4 @@
 dataset/*
 urbansound8k.zip
+__pycache__/
+tmp/

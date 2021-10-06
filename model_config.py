@@ -1,7 +1,7 @@
 # Model architecture configuration file
 import tensorflow as tf
-from keras.models import Sequential, Model
-from keras.layers import (
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import (
     Conv1D,
     MaxPooling1D,
     Dense,
